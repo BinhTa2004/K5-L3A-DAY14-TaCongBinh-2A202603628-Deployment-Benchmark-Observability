@@ -1,33 +1,33 @@
 # Deployment Information
 
 ## Public URL
-https://<YOUR-DEPLOYED-APP-URL>
+https://day14-ai-agent-mqab.onrender.com
 
 ## Platform
-Railway / Render
+Render (Web Service Docker + Render Key Value / Redis, region Singapore)
 
 ## Test Commands
 
 ### 1. Health Check (expect 200)
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<YOUR-DEPLOYED-APP-URL>/health"
+curl -sS -o /dev/null -w '%{http_code}\n' "https://day14-ai-agent-mqab.onrender.com/health"
 ```
 
 ### 2. Readiness Check (expect 200)
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' "https://<YOUR-DEPLOYED-APP-URL>/ready"
+curl -sS -o /dev/null -w '%{http_code}\n' "https://day14-ai-agent-mqab.onrender.com/ready"
 ```
 
 ### 3. API Auth Check — No Key (expect 401)
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' -X POST "https://<YOUR-DEPLOYED-APP-URL>/ask" \
+curl -sS -o /dev/null -w '%{http_code}\n' -X POST "https://day14-ai-agent-mqab.onrender.com/ask" \
   -H "Content-Type: application/json" \
   -d '{"question":"Hello"}'
 ```
 
 ### 4. API Test — With API Key (expect 200)
 ```bash
-curl -sS -o /dev/null -w '%{http_code}\n' -X POST "https://<YOUR-DEPLOYED-APP-URL>/ask" \
+curl -sS -o /dev/null -w '%{http_code}\n' -X POST "https://day14-ai-agent-mqab.onrender.com/ask" \
   -H "Content-Type: application/json" \
   -H "X-API-Key: <YOUR_AGENT_API_KEY>" \
   -d '{"question":"Hello"}'

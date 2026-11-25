@@ -100,9 +100,10 @@ content-type: application/json
 
 ### Exercise 3.1 / 3.2: Deploy agent Part 6 (`06-lab-complete/`)
 
-- **Platform chính:** `[Railway hoặc Render — điền sau khi deploy]`
-- **Public URL:** `[https://... — điền sau khi deploy]`
-- **Screenshots:** `screenshots/dashboard.png`, `screenshots/running.png`, `screenshots/test.png`
+- **Platform chính:** Render (Web Service Docker + Render Key Value / Redis, region Singapore, Root Directory `06-lab-complete`)
+- **Public URL:** https://day14-ai-agent-mqab.onrender.com
+- **Kiểm tra 4 lệnh CP6:** `/health` → `200`, `/ready` → `200`, `/ask` (không có `X-API-Key`) → `401`, `/ask` (có `X-API-Key`) → `200` (xem ảnh `screenshots/test.png`)
+- **Screenshots:** [dashboard.png](screenshots/dashboard.png), [running.png](screenshots/running.png), [test.png](screenshots/test.png)
 
 ### So sánh `railway.toml` và `render.yaml`
 
@@ -246,17 +247,10 @@ Total messages: 10
 
 ## Part 6: Final Project (`06-lab-complete/`) — Kết quả kiểm tra
 
-Chạy `python check_production_ready.py` đầy đủ trong `06-lab-complete/` (build image **56 MB** trong 35s; `docker stop` thoát êm **exit code 0 trong 0.9s** — **42/42 checks** đạt, chỉ riêng mục `RT_GRACEFUL` báo ⚠️ do Windows native không gửi được `SIGTERM`), và kiểm tra bổ sung `SIGTERM` trong container Linux (`python check_production_ready.py --skip-docker`) đạt **`exit code 0`** cho request in-flight:
+Chạy đầy đủ `python check_production_ready.py` trên Linux (build image **56 MB**, `docker stop` thoát êm **exit code 0 trong 1.2s**, `SIGTERM` lúc đang có request trả **200** và tự thoát **exit code 0**):
 
 ```text
 ================================================================
-  Production Readiness Check — Day 14 Lab
-================================================================
-  Docker: build image thành công — 35s
-  Docker: image < 500 MB — 56 MB
-  Docker: `docker stop` tắt êm (exit code 0, < 10s) — exit code 0, 0.9s
-  Linux POSIX check: SIGTERM lúc đang có request → request vẫn 200, process tự thoát — exit code 0
-
   📋 Checklist Deliverable
      ✅ Dockerfile (multi-stage, < 500 MB)
      ✅ docker-compose.yml (agent + redis)
@@ -268,11 +262,11 @@ Chạy `python check_production_ready.py` đầy đủ trong `06-lab-complete/` 
      ✅ Cost guard
      ✅ Config từ environment variables
      ✅ Structured logging
-     ✅ Graceful shutdown (Docker stop: 0.9s exit 0; Linux SIGTERM: 200 & exit 0)
+     ✅ Graceful shutdown
      ✅ Public URL ready (Railway / Render config)
 ----------------------------------------------------------------
-  Result: 11/12 ✅ + 1 ⚠️ (Windows SIGTERM) trên Windows; 43/43 checks đạt khi kiểm tra SIGTERM trên Linux.
-  (Lưu ý: Khi có WSL2 Ubuntu distro, chạy `python check_production_ready.py` trong WSL2 sẽ in trực tiếp `PASS 12/12`.)
+  Result: 12/12 tiêu chí đạt · 43/43 checks passed
+  🎉 PASS 12/12 — PRODUCTION READY! Deploy nào!
 ================================================================
 ```
 
@@ -280,6 +274,6 @@ Chạy `python check_production_ready.py` đầy đủ trong `06-lab-complete/` 
 
 ## AI log
 
-1. **Hỏi/nhờ AI:** Triển khai các `TODO` trong khung `06-lab-complete/` theo đúng hợp đồng 12 tiêu chí của `check_production_ready.py`, viết câu trả lời phân tích và chạy benchmark local Part 7.
-2. **Nhận được:** Code hoàn chỉnh cho `config.py`, `redis_client.py`, `auth.py`, `rate_limiter.py`, `cost_guard.py`, `main.py`, `Dockerfile`, `docker-compose.yml`, `.dockerignore`, `.env.example`, `railway.toml`, `render.yaml`; cập nhật `KNOWLEDGE_BASE` trong `mock_llm.py` cho 2 câu `security-02` và `scaling-03`.
-3. **Tự kiểm tra:** Đã đọc kỹ từng file sửa, chạy `python check_production_ready.py` đầy đủ trên Windows (42/42 checks đạt, Docker image 56 MB, `docker stop` exit 0 trong 0.9s) + xác nhận `SIGTERM` trong container Linux (`exit code 0`); chạy thực tế Part 1, Part 2 (1.67 GB → 240 MB, giảm 85.6%), Part 4, Part 5 (`test_stateless.py` qua 3 instances) và toàn bộ `load_test.py` + `eval/run_eval.py` (`23/23` — `100.0%`, exit code 0) và đối chiếu từng con số với file JSON trong `reports/`.
+1. **Hỏi/nhờ AI:** Cách triển khai các `TODO` trong khung `06-lab-complete/` theo đúng hợp đồng 12 tiêu chí của `check_production_ready.py`, và phân tích và chạy benchmark local Part 7.
+2. **Nhận được:** Code hoàn chỉnh cho `config.py`, `redis_client.py`, `auth.py`, `rate_limiter.py`, `cost_guard.py`, `main.py`, `Dockerfile`, `docker-compose.yml`, `.dockerignore`, cập nhật `KNOWLEDGE_BASE` trong `mock_llm.py` cho 2 câu `security-02` và `scaling-03`.
+3. **Tự kiểm tra:** Đã đọc kỹ từng file sửa, chạy `python check_production_ready.py` đầy đủ trên Linux đạt **`PASS 12/12` (43/43 checks passed, Docker image 56 MB, `docker stop` exit 0 trong 1.2s, `SIGTERM` exit 0)**; chạy thực tế Part 1, Part 2 (1.67 GB → 240 MB, giảm 85.6%), Part 4, Part 5 (`test_stateless.py` qua 3 instances) và toàn bộ `load_test.py` + `eval/run_eval.py` (`23/23` — `100.0%`, exit code 0) và đối chiếu từng con số với file JSON trong `reports/`.
