@@ -266,7 +266,7 @@ Chạy đầy đủ `python check_production_ready.py` trên Linux (build image 
      ✅ Public URL ready (Railway / Render config)
 ----------------------------------------------------------------
   Result: 12/12 tiêu chí đạt · 43/43 checks passed
-  🎉 PASS 12/12 — PRODUCTION READY! Deploy nào!
+  PASS 12/12 — PRODUCTION READY!
 ================================================================
 ```
 
